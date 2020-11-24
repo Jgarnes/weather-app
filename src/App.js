@@ -10,12 +10,39 @@ function App() {
   const [query, setQuery] = useState('');
   const [weather, setWeather] = useState({});
 
-  const search = evt => {
-    if (evt.key === "Enter") {
+
+  const [isMetric, setIsMetric] = useState(true);
+  const [currentTemp, setCurrentTemp] = useState();
+
+  
+  function switchMetric() {
+
+
+    let celsius = Math.round((weather.main.temp));
+    let fahrenheit = Math.round(celsius * (9/5) + 32);
+     
+
+    if(isMetric){
+
+      setIsMetric(false)
+      setCurrentTemp(fahrenheit + "°f") ;
+      
+
+    }
+      else{
+      setIsMetric(true);
+      setCurrentTemp(celsius + "°c");
+      }
+    
+  }
+
+  const search = e => {
+    if (e.key === "Enter") {
       fetch(`${api.base}weather?q=${query}&units=metric&APPID=${api.key}`)
         .then(res => res.json())
         .then(result => {
-          setWeather(result);
+          setWeather(result); 
+          setCurrentTemp(Math.round(result.main.temp)+ "°c") ;
           setQuery('');
           console.log(result);
         });
@@ -34,10 +61,8 @@ function App() {
     return `${day} ${month}, ${date}  ${year}`
   }
 
-  const [active, setActive] = useState(false);
-
   return (
-    <div className={(typeof weather.main != "undefined") ? ((weather.main.temp > 16) ? 'app warm' : 'app') : 'app'}>
+    <div className={(typeof weather.main != "undefined") ? ((weather.main.temp > 20) ? 'app warm' : 'app') : 'app'}>
       <main>
         <div className="search-box">
           <input 
@@ -56,13 +81,14 @@ function App() {
             <div className="date">{dateBuilder(new Date())}</div>
           </div>
           <div className="weather-box">
-            <div className="temp">
-              {Math.round(weather.main.temp)}°c
+            <div className="temp" onClick={()=> switchMetric()}>
+              {currentTemp}
             </div>
             <div className="weather">{weather.weather[0].main}</div>
-            <div id="menuToggle" className="convert" onClick={() => setActive(!active)}>
-              <div >
-                {active ? <span className="celsius">°C</span> : <span className="fahrenheit">°F</span>}
+            <div id="menuToggle" className="convert" onClick={()=> switchMetric()}>
+              <div>
+                <span className={isMetric ? "rounded celsius" : "rounded"}>°C</span>
+                <span className={isMetric ? "rounded" : "rounded fahrenheit"}>°F</span>
               </div>
             </div>
           </div>

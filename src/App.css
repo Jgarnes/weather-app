@@ -117,18 +117,21 @@ main {
 
   text-shadow: 3px 6px rgba(50, 50, 70, 0.5);
   text-align: center;
-  /* box-shadow: 3px 6px rgba(0, 0, 0, 0.2); */
+  
+}
+
+
+.rounded {
+  /* border-radius: 16px 16px 16px 16px; */
+  padding: 15px;
 }
 
 .fahrenheit {
-  border-radius: 16px;
-  padding: 15px;
   background-color: orange;
-  transition: transform 2s ease-in-out;
+  border-radius: 0px 16px 16px 0px;
 }
 
-.celsius {
-  border-radius: 16px;
-  padding: 15px;
+.celsius {  
   background-color: lightskyblue;
+  border-radius: 16px 0px 0px 16px;
 }
