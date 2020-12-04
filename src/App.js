@@ -10,30 +10,35 @@ function App() {
   const [query, setQuery] = useState('');
   const [weather, setWeather] = useState({});
 
-
   const [isMetric, setIsMetric] = useState(true);
   const [currentTemp, setCurrentTemp] = useState();
+  const [hi, setHi] = useState();
+  const [low, setLow] = useState();
 
-  
   function switchMetric() {
 
-
     let celsius = Math.round((weather.main.temp));
-    let fahrenheit = Math.round(celsius * (9/5) + 32);
-     
+    let fahrenheit = Math.round(celsius * (9/5) + 32);     
+    
+    let celsiusHi = Math.round((weather.main.temp_max));
+    let fahrenheitHi = Math.round(celsiusHi * (9/5) + 32);
+    
+    let celsiusLow = Math.round((weather.main.temp_min));
+    let fahrenheitLow = Math.round(celsiusLow * (9/5) + 32);
 
     if(isMetric){
 
       setIsMetric(false)
       setCurrentTemp(fahrenheit + "°f") ;
-      
-
+      setHi(fahrenheitHi);
+      setLow(fahrenheitLow);
     }
       else{
       setIsMetric(true);
       setCurrentTemp(celsius + "°c");
+      setHi(celsiusHi);
+      setLow(celsiusLow);
       }
-    
   }
 
   const search = e => {
@@ -43,6 +48,8 @@ function App() {
         .then(result => {
           setWeather(result); 
           setCurrentTemp(Math.round(result.main.temp)+ "°c") ;
+          setHi(Math.round(result.main.temp_max));
+          setLow(Math.round(result.main.temp_min));
           setQuery('');
           console.log(result);
         });
@@ -84,12 +91,13 @@ function App() {
             <div className="temp" onClick={()=> switchMetric()}>
               {currentTemp}
             </div>
+            <div className="hiLow">Hi:{hi} | Low:{low} </div>
             <div className="weather">{weather.weather[0].main}</div>
             <div id="menuToggle" className="convert" onClick={()=> switchMetric()}>
-              <div>
+              
                 <span className={isMetric ? "rounded celsius" : "rounded"}>°C</span>
                 <span className={isMetric ? "rounded" : "rounded fahrenheit"}>°F</span>
-              </div>
+              
             </div>
           </div>
         </div> 
